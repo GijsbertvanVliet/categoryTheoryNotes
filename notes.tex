@@ -1,0 +1,225 @@
+\documentclass{article} 
+\usepackage{tikz-cd}
+\usepackage{amssymb}
+
+\newcommand{\myparagraph}[1]{\paragraph{#1}\mbox{}\\}
+\newcommand{\cat}[1]{\mathcal{#1}} % category syntax
+\newcommand{\cato}[1]{\cat{#1}^0} % objects of category
+\newcommand{\catm}[1]{\cat{#1}^1} % morphisms of category
+\newcommand{\ob}[1]{\mathfrak{#1}} % category object syntax
+\newcommand{\scat}{\cat{C}\ob{at}}
+\newcommand{\catop}[1]{\cat{#1}^{op}}
+\newcommand{\catopo}[1]{(\catop{#1})^0}
+\newcommand{\catopm}[1]{(\catop{#1})^1}
+\newcommand{\all}{\enspace \forall}
+\newcommand{\allin}[2]{\all #1 \in #2}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{compositionlaw}[theorem]{Composition Law}
+\newtheorem{alg}[theorem]{Algorithm}
+
+
+
+\begin{document}
+
+\title {Category theory notes}
+\maketitle
+
+\section{Definition of a category}
+\begin{definition}
+	A category $\cat{C}$ has objects $\ob{a}$ and arrows $f: \ob{a} \rightarrow \ob{b}$ between objects.
+	$\cato{C}$ denotes the objects of catogory $\cat{C}$ and $\catm{C}$ denotes its arrows.
+	For an arrow $f: \ob{a} \rightarrow \ob{b}$ the object $\ob{a}$ is called its domain and $\ob{b}$ its codomain: also denoted $\ob{a} = dom(f)$ and $\ob{b} = cod(f)$.
+	A category $\cat{C}$ must adhere to the following \emph{axioms}:
+	\begin{itemize}
+		\item if $f$ and $g$ are two functions such that $cod(f)=dom(g)$, then the composition $gf$ (or $g.f$) is a function from $dom(f)$ to $cod(g)$:
+	
+		\begin{tikzcd}
+			(\ob{a} \arrow[r,"f"] & \ob{b} \arrow[r,"g"] & \ob{c}) \quad {\displaystyle \mapsto} \quad ( \ob{a} \arrow[r, "gf"] & \ob{c})
+		\end{tikzcd}
+		\item composition of arrows is \emph{associative}: i.e. given $f: \ob{a} \rightarrow \ob{b}$, $g: \ob{b} \rightarrow \ob{c}$ and $h: \ob{c} \rightarrow \ob{d}$, then $(hg)f = h(gf): \ob{a} \rightarrow \ob{d}$
+		\item every element $\ob{a} \in \cato{C}$ has an identity arrow $id_{\ob{a}}: \ob{a} \rightarrow \ob{a}$ satisfying $id_{\ob{a}}.f = f \allin{f}{\catm{C}}$ with $cod(f)=\ob{a}$ and 
+		$g.id_{\ob{a}} = g \allin{g}{\catm{C}}$ with $dom(g)=\ob{a}$.
+	\end{itemize}
+\end{definition}
+
+
+\begin{example}
+
+	A \emph{preorder} is a set $X$ together with a binary relation $\leq$ which is 
+	\begin{itemize}
+		\item reflexive: i.e. $x \leq x \allin{x}{X} $
+		\item transitive: i.e. $x \leq y, y \leq z \Rightarrow x \leq z \allin{x,y,z}{X}$
+	\end{itemize}
+	any such a preorder can be seen as a category $\cat{C}$ with elements being the objects of $X$ and a unique arrow $x \rightarrow y$ iff $x \leq y$.
+
+\end{example}
+
+\begin{example}
+	A \emph{monoid} is a set $X$ with a binary operation, written like multiplication $xy$ for $x,y \in X$ which is associative and has a unit element $e \in X$ such that $ex = xe = x \allin{x}{X}$.
+	A monoid can be interpreted as a category with one object and one arrow $x$ for every $x \in X$.
+\end{example}
+
+\begin{example}
+	$Top$, $Grp$, $Mon$, $Rng$, $Grph$, $Pos$ are the categories with \emph{topological spaces, groups, monoids, rings, graphs, posets} as objects and their respective homomorphisms (structure preserving functions) as arrows.
+	$Set$ is the category of sets with functions between sets as arrows.
+\end{example}
+
+\begin{definition}
+	A category $\cat{C}$ is called \emph{small} iff both $\cato{C}$ and $\catm{C}$ are sets. The category is called \emph{locally small} iff for any two objects $\ob{a},\ob{b} \in \cat{C}$ the set of morphisms between $\ob{a}$ and $\ob{b}$ (denoted $Hom(\ob{a},\ob{b})$) is a set.
+\end{definition}
+
+\begin{definition}
+	Let $\cat{C}$ be a category, the \emph{oposite category} is denoted $\catop{C}$. This category has the same objects, but arrows pointing the other way. I.e. if $f: \ob{a} \rightarrow \ob{b}$ in $\catm{C}$, then $\bar{f}: \ob{b} \rightarrow \ob{a}$ in $\catopo{C}$. Composition of arrows is defined as $\bar{f}\bar{g} = \bar{gf}$.
+\end{definition}
+
+\begin{definition}
+	An arrow $f: \ob{a} \rightarrow \ob{b}$ is called a \emph{monomorphism} if for any other object $\ob{c}$ and morphisms $g,h: \ob{c} \rightarrow \ob{a}$ $fg = fh$ implies $g=h$.
+	The arrow is called \emph{epimorphism} if for any object $\ob{c}$ and morphisms $g,h: \ob{b} \rightarrow \ob{c}$ $gf = hf$ implies $g=h$.
+\end{definition}
+
+\begin{lemma}
+	Monomorphisms in $Set$ correspond to injective functions, where epimorphisms in $Set$ correspond to surjective functions.
+\end{lemma}
+	
+\begin{lemma}
+	If $gf$ is mono, then $f$ is mono, so by duality: if $fg$ is epi, then $f$ is epi.
+\end{lemma}
+
+\begin{definition}
+	An epi $f: \ob{a} \rightarrow \ob{b}$ is called \emph{split epi} if $\exists g: \ob{b} \rightarrow \ob{a}$ such that $fg = id_{\ob{b}}$. Dually a mono $f: \ob{a} \rightarrow \ob{b}$ is called \emph{split mono} if $\exists g: \ob{b} \rightarrow \ob{a}$ such that $gf = id_{\ob{a}}$.
+\end{definition}
+
+\begin{definition}
+	A morphism $f: \ob{a} \rightarrow \ob{b}$ is called an \emph{isomorphism} if $\exists g: \ob{b} \rightarrow \ob{a}$ such that $fg = id_{\ob{b}}$ and and $gf = id_{\ob{a}}$. In this case the objects $\ob{a}$ and $\ob{b}$ are called \emph{isomorphic}.
+\end{definition}
+
+\begin{lemma}
+	\begin{itemize}
+		\item if two of $f, g$ and $fg$ are iso, then so is the third
+		\item if $f$ is epi and split mono, it is iso
+		\item if $f$ is split epi and mono, it is iso
+	\end{itemize}
+\end{lemma}
+
+\begin{definition}
+	An object $\ob{a} \in \cato{C}$ is called a \emph{terminal object} if for any other object $\ob{b} \in \cato{C}$ there is a unique arrow $f: \ob{b} \rightarrow \ob{a}$. (E.g. singletons are terminal objects in $Set$) Similarly an object $\ob{a} \in \cato{C}$ is called a \emph{initial object} if for ano other object $\ob{b} \in \cato{C}$ there is a unique arrow $f: \ob{a} \rightarrow \ob{b}$. (E.g. the empty set is the only initial object in $Set$.)
+\end{definition}
+
+\begin{lemma}
+	Any two terminal objects are isomorphic. Same for any two initial objects.
+\end{lemma}
+
+
+
+
+
+\section{Functors and natural morphisms}
+
+\begin{definition}
+	A functor $F$ from a category $\cat{C}$ to a category $\cat{D}$ consists of operations $F_0: \cato{C} \rightarrow \cato{D}$ and $F_1: \catm{C} \rightarrow \catm{D}$ such that the following holds:
+	\begin{itemize}
+			\item for each $f: \ob{a} \rightarrow \ob{b}$ in $\cat{C}$: $F_1(f): F_0(\ob{a}) \rightarrow F_0(\ob{b})$
+			\item for each 
+			\begin{tikzcd}
+				\ob{a} \arrow[r, "f"] & \ob{b} \arrow[r, "g"] & \ob{c}
+			\end{tikzcd}: $F_1(gf) = F_1(g)F_1(f)$.
+			\item $F_0(id_{\ob{a}}) = id_{F_0(\ob{a})}$ for each $a \in \cat{C}$
+	\end{itemize}
+\end{definition}
+
+\begin{definition}
+	An endofunctor is a functor $F$ from a category $\cat{C}$ to itself.
+\end{definition}
+
+\begin{definition}
+	A functor $F: \cat{C} \rightarrow \cat{D}$ is called \emph{covariant}, whereas a functor $F: \catop{C} \rightarrow \cat{D}$ is called \emph{contravariant}.
+\end{definition}
+
+Since functors are composable, the following definition can be made:
+
+\begin{definition}
+	$\scat$ is the category whose objects are \emph{small categories} and whose morphisms are functors between those categories.
+\end{definition}
+
+Now that functors are defined, its time to define natural morphisms:
+
+\begin{definition}
+	Let $F, G: \cat{C} \rightarrow \cat{D}$ be two functors of categories $\cat{C}$ and $\cat{D}$: a \emph{natural morphism} $\alpha: F \Rightarrow G$ is a set of morphisms $\alpha_{\ob{a}}: F(\ob{a}) \rightarrow G(\ob{a})$ for any object $\ob{a} \in \cato{C}$ such that for any arrow $f: \ob{a} \rightarrow \ob{b}$ in $\catm{C}$ the following diagram in $\cat{D}$ commutes:
+
+	\begin{tikzcd}
+		F(\ob{a}) \arrow[r, "F(f)"] \arrow[d, "\alpha_{\ob{a}}"] & F(\ob{b}) \arrow[d, "\alpha_{\ob{b}}"] \\
+		G(\ob{a}) \arrow[r, "G(f)"] & G(\ob{b})
+	\end{tikzcd}
+\end{definition}
+
+\begin{definition}
+	A natural transformation $\alpha: F \Rightarrow G$ is called a \emph{natural isomorphism} iff its components $\alpha_{\ob{a}} \ob{a} \in \cat{C}$ are isomorphisms.
+\end{definition}
+
+\begin{definition}
+	Let $\cat{C}$ and $\cat{D}$ be categories. We can define the \emph{Functor category} which is denoted as either $\cat{D}^{\cat{C}}$ or $[\cat{C}, \cat{D}]$ as follows:
+	\begin{itemize}
+		\item objects of this category are functors $F: \cat{C} \rightarrow \cat{D}$
+		\item morphisms between two such functors $F$ and $G$ are natural transformations $\alpha: F \Rightarrow G$
+	\end{itemize}
+\end{definition}
+
+\begin{definition}
+	Actually a category like $\scat$ which has morphisms and natural transformations between morphisms is called a \emph{2-category}.
+\end{definition}
+
+\begin{definition}
+	Let $\cat{C}$ and $\cat{D}$ be two categories, the \emph{product category} or \emph{cartesian product of categories} $\cat{C} \times \cat{D}$ has objects $(\ob{a}, \ob{b})$ where $\ob{a} \in \cato{C}$ and $\ob{b} \in \cato{D}$ and morphisms $(f,b): (\ob{a}, \ob{b}) \rightarrow (\ob{a'}, \ob{b'})$ where $f: \ob{a} \rightarrow \ob{a'} \in \catm{C}$ and $g: \ob{b} \rightarrow \ob{b'} \in \catm{D}$.
+\end{definition}
+
+\begin{definition}
+	A functor from any product category to another category is called a \emph{bifunctor}.
+\end{definition}
+
+\begin{definition}
+	A functor $F: \cat{C} \rightarrow \cat{D}$ is called \emph{faithfull} if its induced function $F_1: Hom(\ob{a}, \ob{b}) \rightarrow Hom(F(\ob{a}), F(\ob{b}))$ is injective for any two objects $\ob{a}, \ob{b} \in \cat{C}$. It is called \emph{full} if this induced function is surjective for any two objects $\ob{a}, \ob{b} \in \cat{C}$.
+\end{definition}
+
+\begin{definition}
+	A functor \emph{reflects} a property if, whenever the image (of objects or arrows) has a property, then the origin has the property too.
+\end{definition}
+
+\begin{lemma}
+	Faithfull functors reflect epis and monos
+\end{lemma}
+
+\begin{lemma}
+	Full and Faithfull functors reflect property of being initial or terminal object.
+\end{lemma}
+
+
+
+
+\section{limits and colimits}
+mention: definition of limits, initial/terminal objects, products and coproducts, equalizer and co equalizer, pullbacks and pushouts
+
+\section{yoneda}
+mention lemma and usual application of it
+
+\section{monads, adjunctions and T-algebras}
+mention relations between those, adjunctions for free and forgetfull 
+
+%\begin{tikzcd}  
+%A \arrow[r,"b"] \arrow[d,"g"] & C \arrow[r,"\alpha"] \arrow[d,"\gamma",pos=0.4,swap]& D \arrow[d,"\beta"]\\
+%B \arrow[rru,"h",pos=0.7,swap] & B' \arrow[r,"\obmega"] & D'
+%\end{tikzcd}
+
+
+
+
+
+
+
+\end{document}
