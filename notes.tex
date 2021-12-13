@@ -1,18 +1,20 @@
 \documentclass{article} 
 \usepackage{tikz-cd}
 \usepackage{amssymb}
+\usepackage{bm}
 
 \newcommand{\myparagraph}[1]{\paragraph{#1}\mbox{}\\}
 \newcommand{\cat}[1]{\mathcal{#1}} % category syntax
-\newcommand{\cato}[1]{\cat{#1}^0} % objects of category
-\newcommand{\catm}[1]{\cat{#1}^1} % morphisms of category
-\newcommand{\ob}[1]{\mathfrak{#1}} % category object syntax
+\newcommand{\cato}[1]{\cat{#1}_0} % objects of category
+\newcommand{\catm}[1]{\cat{#1}_1} % morphisms of category
+\newcommand{\ob}[1]{\mathsf{#1}} % category object syntax
 \newcommand{\scat}{\cat{C}\ob{at}}
 \newcommand{\catop}[1]{\cat{#1}^{op}}
-\newcommand{\catopo}[1]{(\catop{#1})^0}
-\newcommand{\catopm}[1]{(\catop{#1})^1}
+\newcommand{\catopo}[1]{(\catop{#1})_0}
+\newcommand{\catopm}[1]{(\catop{#1})_1}
 \newcommand{\all}{\enspace \forall}
 \newcommand{\allin}[2]{\all #1 \in #2}
+\newcommand{\limc}[1]{\bm{Lim}#1}
 
 \newtheorem{theorem}{Theorem}
 \newtheorem{lemma}[theorem]{Lemma}
@@ -203,6 +205,94 @@ Now that functors are defined, its time to define natural morphisms:
 
 
 \section{limits and colimits}
+
+\begin{definition}
+	Let $F: \cat{C} \rightarrow \cat{D}$ be a functor between categories. A \emph{cone} for $F$ exists of an object $\ob{d} \in \cato{D}$ and a natural transformation $\mu: \Delta_\ob{d} \Rightarrow F$.
+	So it is a family of morphisms $(\mu_\ob{c}: \ob{d} \rightarrow F(\ob{c})| \ob{c} \in \cato{C})$ such that for any morphism \\
+	$f: \ob{c} \rightarrow \ob{c}'$ in $\cat{C}$ the following diagram commutes:
+	\begin{tikzcd}
+		& \ob{d} \arrow[ld, "\mu_\ob{c}" left, near start] \arrow[rd, "\mu_\ob{c}'"] \\
+		F(\ob{c}) \arrow[rr, "F(f)"] & & F(\ob{c}')
+	\end{tikzcd}
+	This cone is denoted as $(\ob{d}, \mu)$ and $\ob{d}$ is called the \emph{vertex} of the cone. 
+	In fact, cones of $F$ form a category with morphisms $f: (\ob{d}, \mu) \rightarrow (\ob{d}', \mu')$ being a morphism $f: \ob{d} \rightarrow \ob{d}'$ in $\catm{C}$ such that $\mu'_\ob{c}g = \mu_\ob{c}$ for any $\ob{c} \in \cato{C}$. I.e. the following diagram commutes for any $\ob{c} \in \cato{C}$:
+	\begin{tikzcd}
+		\ob{d} \arrow[rr, "g"] \arrow[dr, "\mu_\ob{c}"] & & \ob{d}' \arrow[dl, "\mu_\ob{c}'"] \\
+		& F(\ob{c})
+	\end{tikzcd}
+	So all cones over $F$ form a category, which is denoted $Cone(F)$.
+\end{definition}
+
+Note that the codomain of $F$ in the previous definition is regularly called the \emph{diagram of $\cat{C}$ in $\cat{D}$} and the category $\cat{C}$ is called the \emph{index category} of this diagram.
+
+\begin{definition}
+	Let $F$ be as in the previous definition. The terminal object in the category $Cone(F)$ is called the \emph{limiting cone} for $F$ or \emph{limit} for the diagram $F$. It is also sometimes denoted $\limc{F}$. 
+	Note that I say \emph{the} terminal object because terminal objects are unique up to unique isomorphism.
+
+\end{definition}
+
+Now its natural to define the co-definition for cones and limits:
+
+\begin{definition}
+	Let $F: \cat{E} \rightarrow \cat{C}$ be a functor. A \emph{cocone} for this functor is a pair $(\nu, \ob{d})$ where $\ob{d}$ is an object in $\cat{C}$ and $\nu: F \Rightarrow \Delta_D$ is a natural transformation.
+	So a morphism $f: (\nu, \ob{d}) \rightarrow (\nu', \ob{d}')$ in the category of cocones of $F$ are morphisms $f: \ob{d} \rightarrow \ob{d}'$ such that for any $\ob{e} \in \cato{E}$ the following diagram commutes:
+	\begin{tikzcd}
+		& F(\ob{c}) & \\
+		\ob{d} \arrow[ru, "\nu_\ob{c}"] \arrow[rr, "f"] & & \ob{d}' \arrow[lu, "\mu_\ob{c}'"]
+	\end{tikzcd}
+	The \emph{colimit} for $F$ is the initial object in the category of cocones over $F$.
+\end{definition}
+
+Now I will give a few examples of limits and colimits:
+
+\begin{example}
+	Let $\ob{c}, \ob{d}$ be two objects of a category $\cat{C}$. These two objects can be seen as the image of the functor $F: \bm{2} \rightarrow \cat{C}$ where $\bm{2}$ is the \emph{discrete category with two objects} (the category with two objects and no arrows except for the identity arrows). Where the functor $F$ sends the one element of $\bm{2}$ to $\ob{c}$ and the other to $\ob{d}$.
+	The \emph{product} of $\ob{c}$ and $\ob{d}$ is the limit of the category of cones over $F$. 
+	I.e. it is an object $\ob{e}$ together with two morphisms $p: \ob{e} \rightarrow \ob{c}$ and $q: \ob{e} \rightarrow \ob{d}$ such that for any other such object $\ob{e}'$ and morphisms $p'$ and $q'$ there is a unique morphism $m$ that factorizes $p'$ and $q'$.
+	In diagrams this looks as follows:
+	\begin{tikzcd}
+		& \ob{e}' \arrow[ddl, "p'" left, near start] \arrow{d}[description]{\exists ! m} \arrow[ddr, "q'"] \\
+		& \ob{e} \arrow[dl, "p"] \arrow[dr, "q" left] \\
+		\ob{c} & & \ob{d}
+	\end{tikzcd}
+	The morphisms $p$ and $q$ are called the \emph{projections} of the product.
+	Its \emph{coproduct} of $\ob{c}$ and $\ob{d}$ is the colimit of this functor $F$. (Write out the diagram yourself.)
+\end{example}
+
+\begin{example}
+	Let $\bar{\bm{2}}$ be the category 
+	\begin{tikzcd}
+		%\ob{x} \rar[start anchor=real east, end anchor=real west]{a} \rar[start anchor=base east, end anchor=base west, swap]{b} & \ob{y}
+		\ob{x} \arrow[bend left]{r}{a} \arrow[bend right]{r}[below]{b} & \ob{y}
+	\end{tikzcd}.
+	A functor $\bar{\bm{2}} \rightarrow \cat{C}$ is basically a parallel pair of morphisms $f,g: \ob{a} \rightarrow \ob{b}$ in $\cat{C}$. And a cone for this functor is basically a diagram
+	\begin{tikzcd}
+		& \ob{d} \arrow[ld, "\mu_\ob{a}" left, near start] \arrow[rd, "\mu_\ob{b}"] \\
+		\ob{a} \arrow[bend left]{rr}{f} \arrow[bend right]{rr}[below]{g} & & \ob{b}
+	\end{tikzcd} 
+	but $\mu_\ob{b} = f\mu_\ob{a} = g\mu_\ob{a}$ so this arrow is usually omitted, leaving the following diagram:
+	\begin{tikzcd}
+		\ob{d} \arrow[r, "\mu_\ob{a}"] & \ob{a} \arrow[bend left]{r}{f} \arrow[bend right]{r}[below]{g} & \ob{b}
+	\end{tikzcd}.
+	The limit in this category of cones (I.e. the object $\ob{d}$ and morphism $\mu_\ob{a}$) is called the \emph{equalizer} of the pair $f$ and $g$.
+	The definition of the \emph{co equalizer} follows automatically.
+\end{example}
+
+\begin{example}
+	A \emph{pullback} is the limiting cone in the category of cones over a diagram like this:
+	\begin{tikzcd}
+		\ob{a} \arrow[r, "f"] & \ob{b} & \ob{c} \arrow[l, "g"]
+	\end{tikzcd}.
+	Just to clarify, a cone for this diagram looks like this:
+	\begin{tikzcd}
+		& \ob{d} \arrow[ld, "p"] \arrow[rd, "q"] \\
+		\ob{a} \arrow[rd, "f"] & & \ob{c} \arrow[ld, "g"] \\
+		& \ob{b}
+	\end{tikzcd}.
+	(The arrow from $\ob{d}$ to $\ob{b}$ is omitted since it can be given as the composition $gq = fp$.) The co definitions of the pullback is called a \emph{pushout}.
+\end{example}
+
+
 mention: definition of limits, initial/terminal objects, products and coproducts, equalizer and co equalizer, pullbacks and pushouts
 
 \section{yoneda}
