@@ -169,7 +169,7 @@ Now that functors are defined, its time to define natural morphisms:
 \end{definition}
 
 \begin{definition}
-	A natural transformation $\alpha: F \Rightarrow G$ is called a \textbf{natural isomorphism} iff its components $\alpha_{\ob{a}} \ob{a} \in \cat{C}$ are isomorphisms.
+	A natural transformation $\alpha: F \Rightarrow G$ is called a \textbf{natural isomorphism} iff its components $\alpha_{\ob{a}}: \ob{a} \in \cat{C}$ are isomorphisms.
 \end{definition}
 
 \begin{definition}
@@ -368,7 +368,84 @@ Now I will give a few examples of limits and colimits:
 
 
 \section{yoneda}
-mention lemma and usual application of it
+
+\begin{definition}
+	A \textbf{profunctor} is a bifunctor which is contravariant in its first argument and covariant in its second and which codomain is $Set$.
+	So a profunctor is a functor $F: \catop{C} \times \cat{D} \rightarrow Set$.
+\end{definition}
+
+Let $\cat{C}$ be a locally small category and $\ob{a} \in \cato{C}$.
+There is a functor $Hom(a, -): \cat{C} \rightarrow Set$ defined on objects by $\ob{x} \mapsto Hom(\ob{a}, \ob{x})$
+and which sends arrows $f: \ob{x} \rightarrow \ob{y}$ to the function $Hom(a, f): Hom(\ob{a}, \ob{x}) \rightarrow Hom(\ob{a}, \ob{y})$	defined by $Hom(a, f)(h) := fh: \ob{a} \rightarrow \ob{y}$.
+
+Similarly one can fix the second argument in the $Hom$ set in order to get a contravariant functor $Hom(-, b): \catop{C} \rightarrow Set$.
+
+Combine these to functors in order to get a profunctor $Hom(-, -): \catop{C} \times \cat{C} \rightarrow Set$.
+
+\begin{definition}
+	Any functor $F: \cat{C} \rightarrow Set$ which is naturally isomorphic to the Hom functor $Hom(\ob{a}, -)$ for some object $\ob{a}$ is called \textbf{representable}.
+\end{definition}
+
+So this means that there are natural iso's $\alpha: Hom(\ob{a}, -) \rightarrow F$ and $\beta: F \rightarrow Hom(\ob{a}, -)$.
+
+Naturality of $\alpha$ means that for all any arrow $f: \ob{x} \rightarrow \ob{y}$ the following diagram commutes: $$Ff \circ \alpha_\ob{x} = \alpha_\ob{y} \circ Hom(\ob{a}, f)$$.
+
+($\alpha_\ob{x}$ is a function $Hom(\ob{a}, \ob{x}) \rightarrow F\ob{x}$.)
+
+The following lemma is called the \textbf{yoneda lemma}:
+\begin{lemma}
+	Let $\cat{C}$ be any locally small category and furthermore let $\ob{a} \in \cato{C}$ and $F: \cat{C} \rightarrow Set$ be any functor such that $F\ob{a} \neq \emptyset)$:
+	There is an isomorphism (of sets) $$[\cat{C}, Set](Hom(\ob{a}, -), F) \cong Fa$$
+	(remember that $[\cat{C}, Set]$ is the category with functors $\cat{C} \rightarrow Set$ as objects and natural transformations as arrows.)
+\end{lemma}
+
+On one side, lets take any natural transformation $\alpha: Hom(\ob{a}, -) \rightarrow F$, then $\alpha_\ob{a}: Hom(\ob{a}, \ob{a}) \rightarrow Fa$ is a function of sets, which can be evaluated at
+$id_\ob{a} \in Hom(\ob{a}, \ob{a})$ to get an element in $Fa$.
+This way we defined a function $[\cat{C}, Set](Hom(\ob{a}, -), F) \rightarrow Fa$.
+
+Its inverse is a function $Fa \rightarrow [\cat{C}, Set](Hom(\ob{a}, -), F)$ which can be constructed as follows:
+
+Take any object $\ob{x}$ in $\cat{C}$, some morphism $h: \ob{a} \rightarrow \ob{x}$ and a morphism $f: \ob{x} \rightarrow \ob{y}$.
+The naturality square for any natural morphism $\alpha$ given above becomes (point-wise) when acting on $h$:
+$$\alpha_\ob{y}(Hom(\ob{a}, f)h) = (Ff)(\alpha_\ob{x}h)$$
+and $$Hom(\alpha, f)h = f \circ h$$
+which leads to:
+$$\alpha_\ob{y}(f \circ h) = (Ff)(\alpha_\ob{x}h)$$
+
+So specializing $\ob{x} = \ob{a}$ and $h = id_\ob{a}$ this yields:
+$$\alpha_\ob{y}f = (Ff)(\alpha_\ob{a}id_\ob{a})$$
+The left hand side is the action of $\alpha_\ob{y}$ on an arbitrary element $f \in Hom(\ob{a}, \ob{y})$ which it is completely determined by $\alpha_\ob{a}id_\ob{a}$.
+So a natural transformation $\alpha$ can be determined uniquely by choosing any value in $F_\ob{a}$ and setting this as the value for $\alpha_\ob{a} id_\ob{a}$.
+
+\textbf{Co-yoneda} lemma states that
+
+\begin{lemma}
+	$[\catop{C}, Set](Hom(-, \ob{a}), F) \cong F_\ob{a}$.
+\end{lemma}
+
+So using the Yoneda lemma and setting $F := Hom(\ob{b}, -)$ for any object $\ob{b}$ we get the following equality:
+$$[\cat{C}, Set](Hom(\ob{a}, -), Hom(\ob{b}, -)) \cong Hom(\ob{b}, \ob{a})$$
+
+\begin{definition}
+	Define a function $h: \cat{C} \rightarrow Set^{\catop{C}}$ which sends $\ob{a}$ to the functor $h\ob{a} := Hom(\ob{a}, -): \catop{C} \rightarrow Set$ which is an element of $Set^\cat{C}$.
+	This function can be made into a functor be defining its action on a function $f: \ob{b} \rightarrow \ob{a}$. $hf \in [\cat{C}, Set](Hom(\ob{a}, -), Hom(\ob{b}, -))$ using the previously given isomorphism.
+	So the function is actually a functor $h: \cat{C} \rightarrow Set^{\catop{C}}$ which is called the \textbf{Yoneda embedding}.
+\end{definition}
+
+\begin{lemma}
+	The Yoneda embedding is full, faithfull and injective on objects.
+\end{lemma}
+
+The use of the Yoneda lemma is often the following:
+Suppose we want to prove that two objects $\ob{a}, \ob{b} \in \cato{C}$ are isomorphic.
+It suffices to prove that for any object $\ob{x} \in \cato{C}$ there is a bijection $f_\ob{x}: Hom(\ob{x}, \ob{a}) \rightarrow Hom(\ob{x}, \ob{b})$ which is natural in $\ob{x}$.
+Naturality in $\ob{x}$ means the for any morphism $g: \ob{x}' \rightarrow \ob{x}$ the following diagram commutes:
+\begin{tikzcd}
+	Hom(\ob{x}, \ob{a}) \arrow[r, "f_\ob{x}"] \arrow[d, "{Hom(g, id_\ob{a})}"] & Hom(\ob{x}, \ob{b}) \arrow[d, "{Hom(g, id_\ob{b})}"] \\
+	Hom(\ob{x}', \ob{a}) \arrow[r, "f_\ob{x}'"] & Hom(\ob{x}', \ob{b})
+\end{tikzcd}
+
+
 
 \section{monads, adjunctions and T-algebras}
 mention relations between those, adjunctions for free and forgetfull 
