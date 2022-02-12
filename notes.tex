@@ -15,6 +15,7 @@
 \newcommand{\all}{\enspace \forall}
 \newcommand{\allin}[2]{\all #1 \in #2}
 \newcommand{\limc}[1]{\bm{Lim}#1}
+\newcommand{\cata}[1]{\mathsf{cata} \thinspace #1}
 
 \newtheorem{theorem}{Theorem}
 \newtheorem{lemma}[theorem]{Lemma}
@@ -484,7 +485,7 @@ for objects $\ob{d} \in \catob{D}$ and $\ob{c} \in \catob{C}$.
 		R \arrow[r, "\eta \circ R"] \arrow[rd, equal] & R \circ L \circ R \arrow[d, "R \circ \epsilon"] \\
 		& R
 	\end{tikzcd}
-	Here the compositions $L \circ \eta$, $epsolon \circ L$, $\eta \circ R$ and $R \circ \epsolon$ are horizontal compositions or natural transformations.
+	Here the compositions $L \circ \eta$, $\epsilon \circ L$, $\eta \circ R$ and $R \circ \epsilon$ are horizontal compositions or natural transformations.
 	(Where $L = I_L: L \Rightarrow L$ is the identity natural transformation from $l$ to $L$ and $R$ similar.)
 \end{lemma}
 
@@ -533,7 +534,7 @@ Alternatively an adjunction can be described using hom sets:
 
 \begin{lemma}
 	Let $\cat{C}$ be a category and $(T, \eta, \mu)$ a monad on $\cat{C}$, then the kleisli category $\cat{C}_T$ is defined and the composition of arrows are as follows:
-	If $f: \ob{a} \rightarrow T\ob{b}, g: \ob{b} \rightarrow T\ob{c} \in \cato{C}$ (So $f: \ob{a} \rightarrow \ob{b}, g: \ob{b} \rightarrow \ob{c}$ in $\cato{C}_T$.)
+	If $f: \ob{a} \rightarrow T\ob{b}, g: \ob{b} \rightarrow T\ob{c} \in \catm{C}$ (So $f: \ob{a} \rightarrow \ob{b}, g: \ob{b} \rightarrow \ob{c}$ in $(\cat{C_T})_1$.)
 	then $g \circ_T f = \mu \circ Tg \circ f$, is the kleisli composition of arrows. (Note that $g \circ_T f: a \rightarrow T\ob{c}$ in $\catm{C}$.)
 \end{lemma}
 
@@ -574,7 +575,7 @@ The following theorem shows that every adjunction gives rise to a monad:
 	A morphism $\mu: (\ob{a}, f) \rightarrow (\ob{b}, g)$ is simply a morphism $\mu: \ob{a} \rightarrow \ob{b}$ in $\catm{C}$ that makes the following diagram commute:
 
 	\begin{tikzcd}
-		F\ob{a} \arrow[r, "Fm"] \arrow[d, "f"] & F\ob{b} \arrow[d, "g"] \\
+		T\ob{a} \arrow[r, "Tm"] \arrow[d, "f"] & T\ob{b} \arrow[d, "g"] \\
 		\ob{a} \arrow[r, "m"] & \ob{b}
 	\end{tikzcd}
 
@@ -587,7 +588,7 @@ The following theorem shows that every adjunction gives rise to a monad:
 \end{lemma}
 
 \begin{definition}
-	Let $\cat{C}$ be a category with endofunctor $F$ objects in the \textbf{category of $T$-coalgebras} are pairs $(\ob{a}, f)$ where $\ob{a} \in \cato{C}$ and $f: \ob{a} \rightarrow T\ob{a}$.
+	Let $\cat{C}$ be a category with endofunctor $T$. Objects in the \textbf{category of $T$-coalgebras} are pairs $(\ob{a}, f)$ where $\ob{a} \in \cato{C}$ and $f: \ob{a} \rightarrow T\ob{a}$.
 	And a morphism $m: (\ob{a}, f) \rightarrow (\ob{b}, g)$ in this category is a morphism $m: \ob{a} \rightarrow \ob{b}$ which makes the following diagram commute:
 
 	\begin{tikzcd}
@@ -600,27 +601,40 @@ The following theorem shows that every adjunction gives rise to a monad:
 	The arrow $u$ in a terminal objet $(\ob{t}, u)$ of a $T$-coalgebra is an isomorphism.
 \end{lemma}
 
-In fact, every monad also gives rise to an adjunction, as the following theorem states.
+\begin{definition}
+	Let $\cat{C}$ be a category, $T$ an endofunctor and $(\ob{a},f)$ the initial $T$-algebra. (So $\ob{a} \in \cato{C}$ and $f: T\ob{a} \rightarrow \ob{a}$ is iso.)
+	Let furthermore $(\ob{b}, g)$ be any other object in the category of $T$-algebras. Then, since $(\ob{a}, f)$ is the initial object, there is a unique arrow $m: (\ob{a}, f) \rightarrow (\ob{b}, g)$ in the category of $T$-algebras.
+	So there is a unique $m: \ob{a} \rightarrow \ob{b}$ that makes the following square commute:
+	\begin{tikzcd}
+		T\ob{a} \arrow[r, "Tm"] \arrow[d, "f"] & T\ob{b} \arrow[d, "g"] \\
+		\ob{a} \arrow[r, "m"] & \ob{b}
+	\end{tikzcd}.
+	This uniquely defined morphism $m$ is called the \textbf{catamorphism of $g$}, usually denoted $\cata{g}$.
+\end{definition}
+
+Note that, since $f$ is iso, $\cata{g}$ can also be defined as the composition $\cata{g} = g \circ Tm \circ f^{-1}$.
+
+So this equality actually gives a recursive definition of $m = \cata{g}$.
+
+It's already been shown that every adjunction gives rise to a monad. What follows next is the opposite.
+I will show that every monad gives rise to a an adjunction.
+
+\begin{definition}
+	Let $\cat{C}$ be a category and $T$ a monad. Since $T$ is an endofunctor, we can define the category of $T$-algebras.
+	This category is called the \textbf{Eilenberg-Moore category} and is usually denoted by $\cat{C}^T$.
+\end{definition}
 
 \begin{theorem}
+	For such a $T$-algebra there is clearly a forgetful functor $U^T: \cat{C}^T \rightarrow \cat{C}$ which sends objects $(\ob{a}, f)$ to the carrier object $\ob{a}$
+	and morphisms of the $T$-algebra to the corresponding morphism in $\catm{C}$.
 
+	As noted before a forgetful functor is left adjoint to a free functor $F^T: \cat{C} \rightarrow \cat{C}^T$.
+	This free functor sends an object $\ob{a} \in \cato{C}$ to the object $(T\ob{a}, \mu_\ob{a})$, where $\mu$ is the multiplication of the monad $T$.
 \end{theorem}
 
-
-
-
-
-mention relations between those, adjunctions for free and forgetfull 
-
-%\begin{tikzcd}  
-%A \arrow[r,"b"] \arrow[d,"g"] & C \arrow[r,"\alpha"] \arrow[d,"\gamma",pos=0.4,swap]& D \arrow[d,"\beta"]\\
-%B \arrow[rru,"h",pos=0.7,swap] & B' \arrow[r,"\obmega"] & D'
-%\end{tikzcd}
-
-
-
-
-
+It even turns out that
+$$U^T \circ F^T = T$$
+as one might hope.
 
 
 \end{document}
