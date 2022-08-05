@@ -2,6 +2,7 @@
 \usepackage{tikz-cd}
 \usepackage{amssymb}
 \usepackage{bm}
+\usepackage{amsmath}
 
 \newcommand{\myparagraph}[1]{\paragraph{#1}\mbox{}\\}
 \newcommand{\cat}[1]{\mathcal{#1}} % category syntax
@@ -636,5 +637,32 @@ It even turns out that
 $$U^T \circ F^T = T$$
 as one might hope.
 
+\begin{theorem}
+	An \textbf{applicative functor} is an endofunctor $F: \cat{C} \rightarrow \cat{C}$ together with:
+	\begin{itemize}
+		\item a natural morphism $I \rightarrow F$ called \textbf{pure}. (Think of the unit of a monad which sends objects $\ob{a}$ to $F(\ob{a})$ and morphisms $f: \ob{a} \rightarrow \ob{b}$ to a morphism $pure(f): F(\ob{a}) \rightarrow F(\ob{b})$.)
+		\item a binary operation $\circledast: F(\ob{a} \rightarrow \ob{b}) \rightarrow F(\ob{a}) \rightarrow F(\ob{b})$. \newline
+			  (You can think of $\circledast$ as a binary operation that sends the lift of a function $f: \ob{a} \rightarrow \ob{b}$ and the lift of an element $x: \ob{a}$ to $f \circledast x = F(f)(F(\ob{a})): F(\ob{b})$.) \newline
+		      So in a way the function $F(\ob{a} \rightarrow \ob{b}) \circledast F(\ob{a})$ is the \textbf{apply} function on lifted functions $f$.
+	\end{itemize}
+	In order for this definition to be an applicative functor, the following four conditions must hold:
+	\begin{itemize}
+		\item \textbf{Identity law}: $pure(id) \circledast x = x$. This means that $pure(id_\ob{a}) \circledast \_ = id_{F(\ob{a})}$.
+		\item \textbf{Homomorphism law}: $pure(\circ) \circledast u \circledast v \circledast w = u \circledast v \circledast w$
+		      where $u: \ob{a} \rightarrow \ob{b}$, $v: \ob{b} \rightarrow \ob{c}$, $w: \ob{a} \rightarrow \ob{c}$ and $\circ: (\ob{a} \rightarrow \ob{b}, \ob{b} \rightarrow \ob{c}) \rightarrow (\ob{a} \rightarrow \ob{c})$ is function composition.
+		      So this basically says that wrapped composition applies as composition.
+		\item \textbf{Composition law}: $pure(f) \circledast pure(x) = pure(f(x))$.
+		      Which means that applying lifted function to lifted value is the same as lifting the result of applying the function to the element.
+		\item \textbf{Interchange law}: $f \circledast pure(x) = pure(g \mapsto g(x)) \circledast f$ where $f: F(\ob{a}) \rightarrow F(\ob{b})$, $x \in \ob{A}$ and thus $g \mapsto g(x): F(\ob{a} \rightarrow \ob{b}) \rightarrow F(\ob{b})$.
+		      This means that one can change the order of the apply's method.
+	\end{itemize}
+\end{theorem}
+
+\begin{example}
+	The functor $List$ is an applicative functor.
+	In this example the pure function maps an element $a$ to $List(a)$. The binary operator $\circledast$ is more interesting:
+	let $L_f = List(f_0, \dots, f_n)$ be a list of functions $f_i: \ob{a} \rightarrow \ob{b}$ and let $L_a = List(a_0, \dots, a_m)$ be a list of elements $a_i \in \ob{a}$, then
+	$$L_f \circledast L_a = List(f_0(a_0), \dots, f_0(a_m), f_1(a_0), \dots, f_1(a_m), \dots, f_n(a_0), \dots, f_n(a_m))$$
+\end{example}
 
 \end{document}
