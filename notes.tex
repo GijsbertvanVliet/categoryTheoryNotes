@@ -77,12 +77,12 @@
 
 \begin{definition}
 	A category $\cat{C}$ is called \textbf{small} iff both $\cato{C}$ and $\catm{C}$ are sets. The category is called \textbf{locally small}
-	iff for any two objects $\ob{a},\ob{b} \in \cat{C}$ the set of morphisms between $\ob{a}$ and $\ob{b}$ (denoted $Hom(\ob{a},\ob{b})$) is a set.
+	iff for any two objects $\ob{a},\ob{b} \in \cat{C}$ the morphisms between $\ob{a}$ and $\ob{b}$ (denoted $Hom(\ob{a},\ob{b})$) form a set.
 \end{definition}
 
 \begin{definition}
 	Let $\cat{C}$ be a category, the \textbf{oposite category} is denoted $\catop{C}$. This category has the same objects, but arrows pointing the other way.
-	I.e. if $f: \ob{a} \rightarrow \ob{b}$ in $\catm{C}$, then $\bar{f}: \ob{b} \rightarrow \ob{a}$ in $\catopo{C}$. Composition of arrows is defined as $\bar{f}\bar{g} = \bar{gf}$.
+	I.e. if $f: \ob{a} \rightarrow \ob{b}$ in $\catm{C}$, then $\bar{f}: \ob{b} \rightarrow \ob{a}$ in $\catopm{C}$. Composition of arrows is defined as $\bar{f}\bar{g} = \bar{gf}$.
 \end{definition}
 
 \begin{definition}
@@ -248,7 +248,7 @@ Now that functors are defined, its time to define natural morphisms:
 Note that the codomain of $F$ in the previous definition is regularly called the \textbf{diagram of $\cat{C}$ in $\cat{D}$} and the category $\cat{C}$ is called the \textbf{index category} of this diagram.
 
 \begin{definition}
-	Let $F$ be as in the previous definition. The terminal object in the category $Cone(F)$ is called the \textbf{limiting cone} for $F$ or \textbf{limit} for the diagram $F$. It is also sometimes denoted $\limc{F}$.
+	Let $F$ be as in the previous definition. The \textbf{terminal object} in the category $Cone(F)$ is called the \textbf{limiting cone} for $F$ or \textbf{limit} for the diagram $F$. It is also sometimes denoted $\limc{F}$.
 	Note that I say \textbf{the} terminal object because terminal objects are unique up to unique isomorphism.
 
 \end{definition}
@@ -256,13 +256,13 @@ Note that the codomain of $F$ in the previous definition is regularly called the
 Now its natural to define the co-definition for cones and limits:
 
 \begin{definition}
-	Let $F: \cat{E} \rightarrow \cat{C}$ be a functor. A \textbf{cocone} for this functor is a pair $(\nu, \ob{d})$ where $\ob{d}$ is an object in $\cat{C}$ and $\nu: F \Rightarrow \Delta_D$ is a natural transformation.
+	Let $F: \cat{E} \rightarrow \cat{C}$ be a functor. A \textbf{cocone} for this functor is a pair $(\nu, \ob{d})$ where $\ob{d}$ is an object in $\cat{C}$ and $\nu: F \Rightarrow \Delta_\ob{d}$ is a natural transformation.
 	So a morphism $f: (\nu, \ob{d}) \rightarrow (\nu', \ob{d}')$ in the category of cocones of $F$ are morphisms $f: \ob{d} \rightarrow \ob{d}'$ such that for any $\ob{e} \in \cato{E}$ the following diagram commutes:
 	\begin{tikzcd}
 		& F(\ob{c}) & \\
 		\ob{d} \arrow[ru, "\nu_\ob{c}"] \arrow[rr, "f"] & & \ob{d}' \arrow[lu, "\mu_\ob{c}'"]
 	\end{tikzcd}
-	The \textbf{colimit} for $F$ is the initial object in the category of cocones over $F$.
+	The \textbf{colimit} for $F$ is the \textbf{initial object} in the category of cocones over $F$.
 \end{definition}
 
 Now I will give a few examples of limits and colimits:
@@ -539,7 +539,7 @@ Alternatively an adjunction can be described using hom sets:
 	then $g \circ_T f = \mu \circ Tg \circ f$, is the kleisli composition of arrows. (Note that $g \circ_T f: a \rightarrow T\ob{c}$ in $\catm{C}$.)
 \end{lemma}
 
-Ofcourse, its also possible to define a comonad:
+Ofcourse, it's also possible to define a comonad:
 
 \begin{definition}
 	A \textbf{comonad} on a category $\cat{C}$ is an endofunctor $T: \cat{C} \rightarrow \cat{C}$ together with natural transformations
@@ -571,7 +571,7 @@ The following theorem shows that every adjunction gives rise to a monad:
 
 \begin{definition}
 	Let $\cat{C}$ be a category with endofunctor $T$. We will now define the \textbf{category of $T$-algebras}.
-	Objects in this category are pairs $(\ob{a}, f)$, where $\ob{a} \in \cato{C}$ and $f: F\ob{a} \rightarrow \ob{a}$ in $\catm{C}$.
+	Objects in this category are pairs $(\ob{a}, f)$, where $\ob{a} \in \cato{C}$ and $f: T\ob{a} \rightarrow \ob{a}$ in $\catm{C}$.
 	Here $\ob{a}$ is often called the \textbf{carrier} and $f$ is called the \textbf{evaluator function}.
 	A morphism $\mu: (\ob{a}, f) \rightarrow (\ob{b}, g)$ is simply a morphism $\mu: \ob{a} \rightarrow \ob{b}$ in $\catm{C}$ that makes the following diagram commute:
 
