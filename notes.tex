@@ -201,6 +201,16 @@ Now that functors are defined, its time to define natural morphisms:
 \end{definition}
 
 \begin{definition}
+    A category $\cat{C}$ is called \textbf{cartesian closed} if and only if it satisfies the following properties:
+    \begin{itemize}
+        \item It has a \textbf{terminal object}.
+        \item For any two objects $\ob{a}, \ob{b} \in \cat{C}$ there is a product $\ob{a} \times \ob{b} \in \cato{C}$.
+        \item For any two objects $\ob{a}, \ob{b} \in \cat{C}$ there is an exponential $\ob{a}^\ob{b} \in \cato{C}$.
+    \end{itemize}
+\end{definition}
+
+
+\begin{definition}
 	A functor \textbf{reflects} a property if, whenever the image (of objects or arrows) has a property, then the origin has the property too.
 \end{definition}
 
@@ -637,7 +647,7 @@ It even turns out that
 $$U^T \circ F^T = T$$
 as one might hope.
 
-\begin{theorem}
+\begin{definition}
 	An \textbf{applicative functor} is an endofunctor $F: \cat{C} \rightarrow \cat{C}$ together with:
 	\begin{itemize}
 		\item a natural morphism $I \rightarrow F$ called \textbf{pure}. (Think of the unit of a monad which sends objects $\ob{a}$ to $F(\ob{a})$ and morphisms $f: \ob{a} \rightarrow \ob{b}$ to a morphism $pure(f): F(\ob{a}) \rightarrow F(\ob{b})$.)
@@ -656,7 +666,7 @@ as one might hope.
 		\item \textbf{Interchange law}: $f \circledast pure(x) = pure(g \mapsto g(x)) \circledast f$ where $f: F(\ob{a}) \rightarrow F(\ob{b})$, $x \in \ob{A}$ and thus $g \mapsto g(x): F(\ob{a} \rightarrow \ob{b}) \rightarrow F(\ob{b})$.
 		      This means that one can change the order of the apply's method.
 	\end{itemize}
-\end{theorem}
+\end{definition}
 
 \begin{example}
 	The functor $List$ is an applicative functor.
@@ -664,5 +674,14 @@ as one might hope.
 	let $L_f = List(f_0, \dots, f_n)$ be a list of functions $f_i: \ob{a} \rightarrow \ob{b}$ and let $L_a = List(a_0, \dots, a_m)$ be a list of elements $a_i \in \ob{a}$, then
 	$$L_f \circledast L_a = List(f_0(a_0), \dots, f_0(a_m), f_1(a_0), \dots, f_1(a_m), \dots, f_n(a_0), \dots, f_n(a_m))$$
 \end{example}
+
+\begin{definition}
+    An \textbf{alternative function} is an endofunctor $F: \cat{C} \rightarrow \cat{C}$ on a cartesian closed category $\cat{C}$ together with:
+    \begin{itemize}
+        \item a natural transformation $e: I \rightarrow F$
+        \item a natural transformation $m: F \times F \rightarrow F$
+    \end{itemize}
+    such that for any object $\ob{a} \in \cato{C}$ the triple $(F(\ob{a}), e_{\ob{a}}, m_{\ob{a}})$ is a monoid. Natural in $\ob{a}$.
+\end{definition}
 
 \end{document}
